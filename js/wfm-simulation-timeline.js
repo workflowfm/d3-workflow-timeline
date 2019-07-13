@@ -4,7 +4,6 @@ function displayResults(selection,data) {
 	var rightMargin = 30
 	
 	var colorScale = d3.scale.category20().domain(tasks); 
-	//var ticks = Array(totalTicks).fill().map((v,i)=>i);
 	
 	var tRange = timeRange(data)
 	var startTime = tRange[0]
@@ -20,9 +19,8 @@ function displayResults(selection,data) {
 	var chart = d3.timeline()
 		.tickFormat( //
 				{format: d3.format("03d"),
-				tickInterval: 1, // This forces us to start from 001 
+				tickInterval: 1, 
 				numTicks: totalTicks,
-				//tickValues: ticks, // Use this to start from 000
 				tickSize: 10,
 				})
 		/*.tickFormat( //
@@ -39,7 +37,6 @@ function displayResults(selection,data) {
 	
 	chart.showTimeAxisTick();
 	chart.relativeTime();
-	//chart.rowSeparators("#555555");
 
 	var backgroundColor = "#eeeeee";
 	var altBackgroundColor = "white";
@@ -77,7 +74,6 @@ function displayResults(selection,data) {
 	selection.select("svg").selectAll("g").remove();
 	var svg = selection.select("svg")
 		.datum(data)
-		//.attr("width", '100%')
 		.attr("width", totalTicks*widthPerTick+leftMargin+rightMargin)
 		.call(chart);
 }
@@ -105,8 +101,6 @@ function newWorkflow(datum) {
 	var selection = d3.select(this);
 	selection.append("p").text(datum.id);
 	selection.append("svg").attr("class","timeline")
-		//.attr("width", '100%')
-		//.attr("width", totalTicks*widthPerTick);
 	displayResults(selection,datum.data);
 }
 

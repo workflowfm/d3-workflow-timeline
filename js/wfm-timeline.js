@@ -18,7 +18,7 @@ function displayResults(selection,data) {
 	
 	var chart = d3.timeline()
 		.tickFormat( //
-				{format: d3.time.format("%H:%M:%S.%L"),
+				{format: d3.time.format.utc("%H:%M:%S.%L"),
 				//tickTime: tickTime,
 				numTicks: totalTicks/100,
 				tickInterval: 100,
@@ -32,7 +32,6 @@ function displayResults(selection,data) {
 	
 	chart.showTimeAxisTick();
 	chart.relativeTime();
-	//chart.showBorderLine();
 
 	var backgroundColor = "#eeeeee";
 	var altBackgroundColor = "white";
@@ -69,8 +68,6 @@ function displayResults(selection,data) {
 	selection.select("svg").selectAll("g").remove();
 	var svg = selection.select("svg")
 		.datum(data)
-		//.data(data) // this only passes 1 row!
-		//.attr("width", '100%')
 		.attr("width", totalTicks*widthPerTick+leftMargin+rightMargin)
 		.call(chart);
 }
@@ -98,8 +95,6 @@ function newWorkflow(datum) {
 	var selection = d3.select(this);
 	selection.append("p").text(datum.id);
 	selection.append("svg").attr("class","timeline")
-		//.attr("width", '100%')
-		//.attr("width", totalTicks*widthPerTick);
 	displayResults(selection,datum.data);
 }
 
