@@ -134,15 +134,27 @@
 
     var appendBackgroundBar = function (yAxisMapping, index, g, data, datum) {
       var greenbarYAxis = ((itemHeight + itemMargin) * yAxisMapping[index]) + margin.top;
-      g.selectAll("svg").filter(".timeline").data(data).enter()
-        .insert("rect")
-        .attr("class", "row-green-bar")
-        .attr("x", fullLengthBackgrounds ? 0 : margin.left)
-        .attr("width", fullLengthBackgrounds ? width : (width - margin.right - margin.left))
-        .attr("y", greenbarYAxis)
-        .attr("height", itemHeight)
-        .attr("fill", backgroundColor instanceof Function ? backgroundColor(datum, index) : backgroundColor)
-      ;
+      if (stacked) {
+          var svg = g.selectAll("svg").filter(".timeline");
+          g.insert("rect")
+              .attr("class", "row-green-bar")
+              .attr("x", fullLengthBackgrounds ? 0 : margin.left)
+              .attr("width", fullLengthBackgrounds ? width : (width - margin.right - margin.left))
+              .attr("y", greenbarYAxis)
+              .attr("height", itemHeight)
+              .attr("fill", backgroundColor instanceof Function ? backgroundColor(datum, index) : backgroundColor)
+          ;
+      } else {
+          g.selectAll("svg").filter(".timeline").data(data).enter()
+              .insert("rect")
+              .attr("class", "row-green-bar")
+              .attr("x", fullLengthBackgrounds ? 0 : margin.left)
+              .attr("width", fullLengthBackgrounds ? width : (width - margin.right - margin.left))
+              .attr("y", greenbarYAxis)
+              .attr("height", itemHeight)
+              .attr("fill", backgroundColor instanceof Function ? backgroundColor(datum, index) : backgroundColor)
+          ;
+      }
     };
 
     var appendLabel = function (gParent, yAxisMapping, index, hasLabel, datum) {
@@ -434,7 +446,7 @@
         if (!height && !gParentItem.attr("height")) {
           if (itemHeight) {
             // set height based off of item height
-            height = g[0][0].getBBox().height + gSize.top; // - gParentSize.top;
+            height = gSize.height + gSize.top - gParentSize.top;
             // set bounding rectangle height
             d3.select(gParent[0][0]).attr("height", height);
           } else {
