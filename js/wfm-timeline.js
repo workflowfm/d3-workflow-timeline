@@ -115,5 +115,3 @@ function displayOne(tag,workflowData) {
 	div.append("svg").attr("class","timeline")
 	displayResults(div,workflowData)
 }
-
-displayAll("#workflows",workflowData);

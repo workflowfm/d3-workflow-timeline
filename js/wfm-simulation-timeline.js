@@ -1,5 +1,4 @@
-function displayResults(selection,data) {
-	var widthPerTick = 60
+function displayResults(selection, data, widthPerTick = 60, tickInterval = 1, tickTime = null, tickTimeFormat = null) {
 	var leftMargin = 100
 	var rightMargin = 30
 	
@@ -9,26 +8,32 @@ function displayResults(selection,data) {
 	var startTime = tRange[0]
 	var endTime = tRange[1]
 	
-	var totalTicks = endTime - startTime
+    var totalTicks = 0;
+    var tickFormat = null;
+    if (tickTime != null) {
+	    totalTicks = tickTime(startTime,endTime).length;
+        if (tickTimeFormat == null) tickTimeFormat = d3.time.format.utc("%H");
+        tickFormat = {
+            format: tickTimeFormat,
+			tickTime: tickTime,
+			tickInterval: tickInterval,
+			tickSize: 10,
+		};
+    } else {
+	    totalTicks = endTime - startTime
+        tickFormat = {
+            format: d3.format("03d"),
+			tickInterval: 1, 
+			numTicks: totalTicks,
+			tickSize: 10,
+		};
+    }
 	
-	//var tickTime = d3.time.minutes
-	//var totalTicks = tickTime(startTime,endTime).length	
-	
-	console.log("Total Ticks: " + totalTicks)
-	
+	console.log("Total Ticks: " + totalTicks);
+
+
 	var chart = d3.timeline()
-		.tickFormat( //
-				{format: d3.format("03d"),
-				tickInterval: 1, 
-				numTicks: totalTicks,
-				tickSize: 10,
-				})
-		/*.tickFormat( //
-				{format: d3.time.format.utc("%H"),
-				tickTime: tickTime,
-				tickInterval: 1,
-				tickSize: 10,
-				})*/
+		.tickFormat(tickFormat)
 		.stack()
 		.margin({left:100, right:30, top:0, bottom:0})
 		.colors( colorScale )
@@ -104,12 +109,9 @@ function newWorkflow(datum) {
 	displayResults(selection,datum.data);
 }
 
-function displayOne(tag,workflowData) {
-	var div = d3.select(tag)//.data(workflowData)
-	div.selectAll("svg").remove()
-	div.append("svg").attr("class","timeline")
-	displayResults(div,workflowData)
+function displayOne(tag, workflowData, widthPerTick = 60, tickInterval = 1, tickTime = null, tickTimeFormat = null) {
+	var div = d3.select(tag);
+	div.selectAll("svg").remove();
+	div.append("svg").attr("class","timeline");
+	displayResults(div,workflowData,widthPerTick,tickInterval,tickTime,tickTimeFormat);
 }
-
-displayOne("#resources",resourceData);
-displayOne("#simulations",simulationData);
