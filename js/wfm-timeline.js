@@ -25,7 +25,7 @@ function displayResults(selection,data) {
 				tickSize: 1,
 				})
 		.stack()
-		.margin({left:100, right:30, top:0, bottom:0})
+		.margin({left: leftMargin, right: rightMargin, top:0, bottom:0})
 		.colors( colorScale )
 		.colorProperty('process')
 		.width(totalTicks*widthPerTick+leftMargin+rightMargin);

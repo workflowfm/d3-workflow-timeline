@@ -1,5 +1,4 @@
-function displayResults(selection, data, widthPerTick = 60, tickInterval = 1, tickTime = null, tickTimeFormat = null) {
-	var leftMargin = 100
+function displayResults(selection, data, widthPerTick = 60, leftMargin = 100, tickInterval = 1, tickTime = null, tickTimeFormat = null) {
 	var rightMargin = 30
 	
 	var colorScale = d3.scale.category20().domain(tasks); 
@@ -35,7 +34,7 @@ function displayResults(selection, data, widthPerTick = 60, tickInterval = 1, ti
 	var chart = d3.timeline()
 		.tickFormat(tickFormat)
 		.stack()
-		.margin({left:100, right:30, top:0, bottom:0})
+		.margin({left: leftMargin, right: rightMargin, top:0, bottom:0})
 		.colors( colorScale )
 		.colorProperty('task')
 		.width(totalTicks*widthPerTick+leftMargin+rightMargin);
@@ -97,21 +96,9 @@ function timeRange(data) {
 	return [start,finish]
 }
 
-function workflow(datum) {
-	var selection = d3.select(this);
-	displayResults(selection,datum.data);
-}
-
-function newWorkflow(datum) {
-	var selection = d3.select(this);
-	selection.append("p").text(datum.id);
-	selection.append("svg").attr("class","timeline")
-	displayResults(selection,datum.data);
-}
-
-function displayOne(tag, workflowData, widthPerTick = 60, tickInterval = 1, tickTime = null, tickTimeFormat = null) {
+function displayOne(tag, workflowData, widthPerTick = 60, leftMargin = 100, tickInterval = 1, tickTime = null, tickTimeFormat = null) {
 	var div = d3.select(tag);
 	div.selectAll("svg").remove();
 	div.append("svg").attr("class","timeline");
-	displayResults(div,workflowData,widthPerTick,tickInterval,tickTime,tickTimeFormat);
+	displayResults(div,workflowData,widthPerTick,leftMargin,tickInterval,tickTime,tickTimeFormat);
 }
