@@ -7,15 +7,17 @@
     <title>WorkflowFM - Results Timeline</title>
 	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script type="text/javascript" src="js/d3-timeline.js"></script>
+    <script type="text/javascript" src="js/wfm-timeline.js"></script>
 </head>
 
 <body>
-<div id="workflows"></div>
+<h2>Workflows:</h2>
 
+<div id="workflows"></div>
 <script type="text/javascript" src="data/data-example.js"></script>
-<script type="text/javascript" src="js/wfm-timeline.js"></script>
+
 <script type="text/javascript">
-  displayAll("#workflows",workflowData);
+  displayAll("#workflows", workflowData, 10, 50, 10);
 </script></body>
 
 </html>
