@@ -1,6 +1,4 @@
-function displayResults(selection,data) {
-	var widthPerTick = 10
-	var leftMargin = 100
+function displayResults(selection, data, widthPerTick = 10, leftMargin = 100, tickInterval = 100) {
 	var rightMargin = 30
 	
 	var colorScale = d3.scale.category20().domain(processes); 
@@ -20,8 +18,8 @@ function displayResults(selection,data) {
 		.tickFormat( //
 				{format: d3.time.format.utc("%H:%M:%S.%L"),
 				//tickTime: tickTime,
-				numTicks: totalTicks/100,
-				tickInterval: 100,
+				numTicks: totalTicks/tickInterval,
+				tickInterval: tickInterval,
 				tickSize: 1,
 				})
 		.stack()
@@ -91,14 +89,15 @@ function workflow(datum) {
 	displayResults(selection,datum.data);
 }
 
-function newWorkflow(datum) {
-	var selection = d3.select(this);
-	selection.append("p").text(datum.id);
-	selection.append("svg").attr("class","timeline")
-	displayResults(selection,datum.data);
-}
+function newWorkflow(widthPerTick, leftMargin, tickInterval) {
+    return function(datum) {
+	    var selection = d3.select(this);
+	    selection.append("p").text(datum.id);
+	    selection.append("svg").attr("class","timeline")
+	    displayResults(selection,datum.data,widthPerTick,leftMargin,tickInterval);
+} }
 
-function displayAll(tag,workflowData) {
+function displayAll(tag, workflowData, widthPerTick = 10, leftMargin = 100, tickInterval = 100) {
 	var div = d3.select(tag).selectAll("div")
 		.data(workflowData, function(d) { return d ? d.id : this.id; })
 		.each(workflow);
@@ -106,12 +105,5 @@ function displayAll(tag,workflowData) {
 	div.enter()
 		.append("div")
 			.attr("id",function(d) {d.id})
-			.each(newWorkflow);
-}
-
-function displayOne(tag,workflowData) {
-	var div = d3.select(tag)//.data(workflowData)
-	div.selectAll("svg").remove()
-	div.append("svg").attr("class","timeline")
-	displayResults(div,workflowData)
+			.each(newWorkflow(widthPerTick,leftMargin,tickInterval));
 }
